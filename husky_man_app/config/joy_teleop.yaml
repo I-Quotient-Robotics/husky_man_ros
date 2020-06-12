@@ -1,0 +1,154 @@
+teleop:
+  move:
+    type: topic
+    message_type: geometry_msgs/Twist
+    topic_name: cmd_vel
+    deadman_buttons: [2] # LT
+    axis_mappings:
+      -
+        axis: 1
+        target: linear.x
+        scale: 1.0
+      -
+        axis: 0
+        target: angular.z
+        scale: 1.0
+
+  # 机械臂末端位置控制
+  letf_linear_control:
+    type: topic
+    message_type: kinova_msgs/PoseVelocity                     # 消息类型
+    topic_name: left_arm_driver/in/cartesian_velocity                                # 接收手柄信号的Topic
+    deadman_buttons: [4]                                  # 安全键（Deadman button），手柄LT按钮
+    axis_mappings:
+      -
+        axis: 1                 # 左摇杆横轴
+        target: twist_linear_x        # 左右平移
+        scale: -1               # 速度比例（0.5 意味着，最小速度为-0.5，最大为0.5
+      -
+        axis: 0                 # 左摇杆纵轴
+        target: twist_linear_y        # 上下平移
+        scale: -1               # 速度比例（0.5 意味着，最小速度为-0.5，最大为0.5
+      -
+        axis: 2                 # 右摇杆纵轴
+        target: twist_linear_z        # 前后平移
+        scale: -1                # 速度比例（1.0 意味着，最小速度为-1.0，最大为1.0
+
+  letf_angular_control:
+    type: topic
+    message_type: kinova_msgs/PoseVelocity                     # 消息类型
+    topic_name: left_arm_driver/in/cartesian_velocity                                # 接收手柄信号的Topic
+    deadman_buttons: [6]                                  # 安全键（Deadman button），手柄LT按钮
+    axis_mappings:
+      -
+        axis: 1                 # 左摇杆横轴
+        target: twist_angular_x        # 左右平移
+        scale: -1               # 速度比例（0.5 意味着，最小速度为-0.5，最大为0.5
+      -
+        axis: 0                 # 左摇杆纵轴
+        target: twist_angular_y        # 上下平移
+        scale: -1               # 速度比例（0.5 意味着，最小速度为-0.5，最大为0.5
+      -
+        axis: 2                 # 右摇杆纵轴
+        target: twist_angular_z        # 前后平移
+        scale: -1                # 速度比例（1.0 意味着，最小速度为-1.0，最大为1.0
+
+  right_linear_control:
+    type: topic
+    message_type: kinova_msgs/PoseVelocity                     # 消息类型
+    topic_name: right_arm_driver/in/cartesian_velocity                                # 接收手柄信号的Topic
+    deadman_buttons: [5]                                  # 安全键（Deadman button），手柄LT按钮
+    axis_mappings:
+      -
+        axis: 1                 # 左摇杆横轴
+        target: twist_linear_y        # 左右平移
+        scale: -1               # 速度比例（0.5 意味着，最小速度为-0.5，最大为0.5
+      -
+        axis: 0                 # 左摇杆纵轴
+        target: twist_linear_z        # 上下平移
+        scale: -1               # 速度比例（0.5 意味着，最小速度为-0.5，最大为0.5
+      -
+        axis: 2                 # 右摇杆纵轴
+        target: twist_linear_x        # 前后平移
+        scale: 1                # 速度比例（1.0 意味着，最小速度为-1.0，最大为1.0
+
+  right_angular_control:
+    type: topic
+    message_type: kinova_msgs/PoseVelocity                     # 消息类型
+    topic_name: right_arm_driver/in/cartesian_velocity                                # 接收手柄信号的Topic
+    deadman_buttons: [7]                                  # 安全键（Deadman button），手柄LT按钮
+    axis_mappings:
+      -
+        axis: 1                 # 左摇杆横轴
+        target: twist_angular_y        # 左右平移
+        scale: -1               # 速度比例（0.5 意味着，最小速度为-0.5，最大为0.5
+      -
+        axis: 0                 # 左摇杆纵轴
+        target: twist_angular_x        # 上下平移
+        scale: 1               # 速度比例（0.5 意味着，最小速度为-0.5，最大为0.5
+      -
+        axis: 2                 # 右摇杆纵轴
+        target: twist_angular_z        # 前后平移
+        scale: 1                # 速度比例（1.0 意味着，最小速度为-1.0，最大为1.0
+
+  left_home:
+    type: service
+    service_name: /left_arm_driver/in/home_arm
+    buttons: [4, 0]            # BACK
+  right_home:
+    type: service
+    service_name: /right_arm_driver/in/home_arm
+    buttons: [5, 0]            # BACK
+
+  left_stop:
+    type: service
+    service_name: /left_arm_driver/in/stop
+    buttons: [4, 8]   
+  left_start:
+    type: service
+    service_name: /left_arm_driver/in/start
+    buttons: [4, 9] 
+  right_stop:
+    type: service
+    service_name: /right_arm_driver/in/stop
+    buttons: [5, 8] 
+  right_start:
+    type: service
+    service_name: /right_arm_driver/in/start
+    buttons: [5, 9] 
+
+  left_finger_close_action:
+    type: action
+    action_name: /left_arm_driver/fingers_action/finger_positions
+    action_goal:
+      fingers: 
+        finger1: 3500
+        finger2: 3500
+    buttons: [4, 3]
+
+  left_finger_open_action:
+    type: action
+    action_name: /left_arm_driver/fingers_action/finger_positions
+    action_goal:
+      fingers: 
+        finger1: 0
+        finger2: 0
+    buttons: [4, 1]
+
+  right_finger_close_action:
+    type: action
+    action_name: /right_arm_driver/fingers_action/finger_positions
+    action_goal:
+      fingers: 
+        finger1: 3500
+        finger2: 3500
+    buttons: [5, 3]
+
+  right_finger_open_action:
+    type: action
+    action_name: /right_arm_driver/fingers_action/finger_positions
+    action_goal:
+      fingers: 
+        finger1: 0
+        finger2: 0
+    buttons: [5, 1]

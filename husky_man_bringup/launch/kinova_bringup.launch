@@ -1,0 +1,31 @@
+<launch>
+
+  <!-- <include file="$(find caster_teleop)/launch/teleop.launch"/> -->
+
+<!--   <node name="left_arm_driver" pkg="kinova_driver" type="kinova_arm_driver" output="screen" cwd="node" args="j2n6s200">
+    <rosparam file="$(find kinova_bringup)/launch/config/robot_parameters.yaml" command="load" />
+    <param name="serial_number" value="leftarm" />   
+    <param name="robot_name" value="left_arm" />   
+    <param name="robot_type" value="j2n6s200" />   
+    <remap from="/left_arm_driver/out/joint_state" to="/joint_states"/>
+  </node>
+  -->
+  <node name="right_arm_driver" pkg="kinova_driver" type="kinova_arm_driver" output="screen" cwd="node" args="j2n6s200">
+    <rosparam file="$(find kinova_bringup)/launch/config/robot_parameters.yaml" command="load" />
+    <param name="serial_number" value="rightarm" />  
+    <param name="robot_name" value="right_arm" />   
+    <param name="robot_type" value="j2n6s200" />   
+    <remap from="/right_arm_driver/out/joint_state" to="/joint_states"/>
+  </node>
+ 
+<!--   <include file="$(find kinova_bringup)/launch/kinova_robot.launch">
+    <arg name="use_urdf" value="false"/>
+    <arg name="kinova_robotType" value="j2n6s200" />
+    <arg name="kinova_robotName" value="right_arm"/>
+    <arg name="kinova_robotSerial" value="rightarm" />
+    <arg name="use_jaco_v1_fingers" value="false" />
+    <arg name="feedback_publish_rate" value="0.1" />
+  </include> -->
+
+
+</launch>

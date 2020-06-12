@@ -1,0 +1,470 @@
+<?xml version="1.0" ?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="husky">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="left_arm">
+        <chain base_link="left_arm_link_base" tip_link="left_arm_end_effector" />
+    </group>
+    <group name="right_arm">
+        <chain base_link="right_arm_link_base" tip_link="right_arm_end_effector" />
+    </group>
+    <group name="left_gripper">
+        <link name="left_arm_end_effector" />
+        <link name="left_arm_link_finger_1" />
+        <link name="left_arm_link_finger_2" />
+        <joint name="left_arm_joint_finger_1" />
+        <joint name="left_arm_joint_finger_2" />
+    </group>
+    <group name="right_gripper">
+        <link name="left_arm_end_effector" />
+        <link name="left_arm_link_finger_1" />
+        <link name="left_arm_link_finger_2" />
+        <joint name="left_arm_joint_finger_1" />
+        <joint name="left_arm_joint_finger_2" />
+    </group>
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="left_home" group="left_arm">
+        <joint name="left_arm_joint_1" value="0" />
+        <joint name="left_arm_joint_2" value="1.5524" />
+        <joint name="left_arm_joint_3" value="5.7963" />
+        <joint name="left_arm_joint_4" value="-2.3431" />
+        <joint name="left_arm_joint_5" value="1.9613" />
+        <joint name="left_arm_joint_6" value="-0.1952" />
+    </group_state>
+    <group_state name="right_home" group="right_arm">
+        <joint name="right_arm_joint_1" value="0" />
+        <joint name="right_arm_joint_2" value="4.7877" />
+        <joint name="right_arm_joint_3" value="0.5707" />
+        <joint name="right_arm_joint_4" value="2.4472" />
+        <joint name="right_arm_joint_5" value="-2.0654" />
+        <joint name="right_arm_joint_6" value="0.1665" />
+    </group_state>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="left_eff" parent_link="base_link" group="left_gripper" />
+    <end_effector name="right_eff" parent_link="base_link" group="right_gripper" />
+    <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
+    <virtual_joint name="world_link" type="fixed" parent_frame="world" child_link="base_link" />
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="base_link" link2="front_bumper_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="front_left_wheel_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="front_right_wheel_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="kinect_v2_base" reason="Never" />
+    <disable_collisions link1="base_link" link2="left_arm_link_1" reason="Never" />
+    <disable_collisions link1="base_link" link2="left_arm_link_2" reason="Never" />
+    <disable_collisions link1="base_link" link2="left_arm_link_3" reason="Never" />
+    <disable_collisions link1="base_link" link2="left_arm_link_base" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="pan_tilt_base_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="pan_tilt_pitch_link" reason="Never" />
+    <disable_collisions link1="base_link" link2="pan_tilt_yaw_link" reason="Never" />
+    <disable_collisions link1="base_link" link2="rear_bumper_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="rear_left_wheel_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="rear_right_wheel_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="base_link" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="base_link" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="base_link" link2="right_arm_link_base" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="support_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="top_chassis_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="user_rail_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="base_link" link2="velodyne_base_link" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="vlp_support_link" reason="Adjacent" />
+    <disable_collisions link1="front_bumper_link" link2="front_left_wheel_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="front_right_wheel_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="kinect_v2_base" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_1" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_2" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_3" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_4" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_5" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_6" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_base" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="left_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="pan_tilt_base_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="pan_tilt_pitch_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="pan_tilt_yaw_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_4" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_5" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_6" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="right_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="support_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="top_chassis_link" reason="Default" />
+    <disable_collisions link1="front_bumper_link" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="front_bumper_link" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="front_right_wheel_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="kinect_v2_base" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="left_arm_link_1" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="left_arm_link_2" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="left_arm_link_3" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="left_arm_link_4" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="left_arm_link_5" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="left_arm_link_base" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="pan_tilt_base_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="pan_tilt_pitch_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="pan_tilt_yaw_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="right_arm_link_4" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="right_arm_link_5" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="right_arm_link_6" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="support_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="front_left_wheel_link" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="kinect_v2_base" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_1" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_2" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_3" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_4" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_5" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_6" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_base" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="left_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="pan_tilt_base_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="pan_tilt_pitch_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="pan_tilt_yaw_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="right_arm_link_4" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="support_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="front_right_wheel_link" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="left_arm_link_1" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="left_arm_link_base" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="pan_tilt_pitch_link" reason="Adjacent" />
+    <disable_collisions link1="kinect_v2_base" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="support_link" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="velodyne" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="kinect_v2_base" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="left_arm_link_2" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_1" link2="left_arm_link_3" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="left_arm_link_4" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="left_arm_link_base" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_1" link2="pan_tilt_base_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="pan_tilt_pitch_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="pan_tilt_yaw_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="right_arm_link_4" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="right_arm_link_5" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="support_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="velodyne" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_1" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="left_arm_link_3" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_2" link2="left_arm_link_4" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="left_arm_link_base" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="pan_tilt_base_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="velodyne" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_2" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="left_arm_link_4" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_3" link2="left_arm_link_5" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="left_arm_link_6" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="left_arm_link_base" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="left_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="left_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="left_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="left_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_3" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="left_arm_link_5" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_4" link2="left_arm_link_6" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="left_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="left_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="left_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="left_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_4" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_5" link2="left_arm_link_6" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_5" link2="left_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_5" link2="left_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_5" link2="left_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_5" link2="left_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_5" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_5" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_5" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_5" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_6" link2="left_arm_link_finger_1" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_6" link2="left_arm_link_finger_2" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_6" link2="left_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_6" link2="left_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_6" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_6" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_6" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_6" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="pan_tilt_base_link" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_base" link2="pan_tilt_pitch_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="pan_tilt_yaw_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="right_arm_link_base" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_base" link2="support_link" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_base" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="velodyne" reason="Never" />
+    <disable_collisions link1="left_arm_link_base" link2="velodyne_base_link" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_base" link2="vlp_support_link" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_finger_1" link2="left_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_1" link2="left_arm_link_finger_tip_1" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_finger_1" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_1" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_1" link2="right_arm_link_4" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_1" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_1" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_2" link2="left_arm_link_finger_tip_2" reason="Adjacent" />
+    <disable_collisions link1="left_arm_link_finger_2" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_2" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_2" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_2" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_2" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_2" link2="right_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_1" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_1" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_1" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_1" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_1" link2="velodyne" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_1" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_2" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_2" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_2" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_2" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_2" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_2" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="left_arm_link_finger_tip_2" link2="right_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="pan_tilt_base_link" link2="pan_tilt_pitch_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_base_link" link2="pan_tilt_yaw_link" reason="Adjacent" />
+    <disable_collisions link1="pan_tilt_base_link" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_base_link" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_base_link" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_base_link" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="pan_tilt_base_link" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="pan_tilt_base_link" link2="right_arm_link_base" reason="Adjacent" />
+    <disable_collisions link1="pan_tilt_base_link" link2="support_link" reason="Adjacent" />
+    <disable_collisions link1="pan_tilt_base_link" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_base_link" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_base_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="pan_tilt_base_link" link2="velodyne_base_link" reason="Adjacent" />
+    <disable_collisions link1="pan_tilt_base_link" link2="vlp_support_link" reason="Adjacent" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="pan_tilt_yaw_link" reason="Adjacent" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="support_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_pitch_link" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="rear_bumper_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="support_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="pan_tilt_yaw_link" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="rear_left_wheel_link" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_4" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_5" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_6" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="right_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="support_link" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="top_chassis_link" reason="Default" />
+    <disable_collisions link1="rear_bumper_link" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="rear_bumper_link" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="rear_right_wheel_link" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_4" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_5" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_6" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="right_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="support_link" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="rear_left_wheel_link" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="right_arm_link_1" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="right_arm_link_2" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="right_arm_link_4" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="support_link" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="rear_right_wheel_link" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_1" link2="right_arm_link_2" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_1" link2="right_arm_link_3" reason="Never" />
+    <disable_collisions link1="right_arm_link_1" link2="right_arm_link_4" reason="Never" />
+    <disable_collisions link1="right_arm_link_1" link2="right_arm_link_base" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_1" link2="support_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_1" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_1" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_1" link2="velodyne" reason="Never" />
+    <disable_collisions link1="right_arm_link_1" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_1" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_2" link2="right_arm_link_3" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_2" link2="right_arm_link_4" reason="Never" />
+    <disable_collisions link1="right_arm_link_2" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="right_arm_link_2" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_2" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_2" link2="velodyne" reason="Never" />
+    <disable_collisions link1="right_arm_link_2" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_2" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_3" link2="right_arm_link_4" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_3" link2="right_arm_link_5" reason="Never" />
+    <disable_collisions link1="right_arm_link_3" link2="right_arm_link_6" reason="Never" />
+    <disable_collisions link1="right_arm_link_3" link2="right_arm_link_base" reason="Never" />
+    <disable_collisions link1="right_arm_link_3" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="right_arm_link_3" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="right_arm_link_3" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="right_arm_link_3" link2="right_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="right_arm_link_3" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_3" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_3" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_4" link2="right_arm_link_5" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_4" link2="right_arm_link_6" reason="Never" />
+    <disable_collisions link1="right_arm_link_4" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="right_arm_link_4" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="right_arm_link_4" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="right_arm_link_4" link2="right_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="right_arm_link_4" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_5" link2="right_arm_link_6" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_5" link2="right_arm_link_finger_1" reason="Never" />
+    <disable_collisions link1="right_arm_link_5" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="right_arm_link_5" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="right_arm_link_5" link2="right_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="right_arm_link_6" link2="right_arm_link_finger_1" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_6" link2="right_arm_link_finger_2" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_6" link2="right_arm_link_finger_tip_1" reason="Never" />
+    <disable_collisions link1="right_arm_link_6" link2="right_arm_link_finger_tip_2" reason="Never" />
+    <disable_collisions link1="right_arm_link_base" link2="support_link" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_base" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_base" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="right_arm_link_base" link2="velodyne" reason="Never" />
+    <disable_collisions link1="right_arm_link_base" link2="velodyne_base_link" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_base" link2="vlp_support_link" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_finger_1" link2="right_arm_link_finger_2" reason="Never" />
+    <disable_collisions link1="right_arm_link_finger_1" link2="right_arm_link_finger_tip_1" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_finger_2" link2="right_arm_link_finger_tip_2" reason="Adjacent" />
+    <disable_collisions link1="right_arm_link_finger_tip_2" link2="velodyne" reason="Never" />
+    <disable_collisions link1="support_link" link2="top_chassis_link" reason="Never" />
+    <disable_collisions link1="support_link" link2="user_rail_link" reason="Never" />
+    <disable_collisions link1="support_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="support_link" link2="velodyne_base_link" reason="Adjacent" />
+    <disable_collisions link1="support_link" link2="vlp_support_link" reason="Adjacent" />
+    <disable_collisions link1="top_chassis_link" link2="user_rail_link" reason="Default" />
+    <disable_collisions link1="top_chassis_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="top_chassis_link" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="top_chassis_link" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="user_rail_link" link2="velodyne" reason="Never" />
+    <disable_collisions link1="user_rail_link" link2="velodyne_base_link" reason="Never" />
+    <disable_collisions link1="user_rail_link" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="velodyne" link2="velodyne_base_link" reason="Adjacent" />
+    <disable_collisions link1="velodyne" link2="vlp_support_link" reason="Never" />
+    <disable_collisions link1="velodyne_base_link" link2="vlp_support_link" reason="Adjacent" />
+</robot>

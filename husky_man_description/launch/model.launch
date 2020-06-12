@@ -1,0 +1,20 @@
+<launch>
+	<!-- <arg name="kinova_robotType" default="j2n6s300" /> -->
+  <arg name="robot_namespace" default="/"/>
+  <arg name="laser_enabled" default="$(optenv HUSKY_LMS1XX_ENABLED false)"/>
+  <arg name="kinect_enabled" default="$(optenv HUSKY_KINECT_ENABLED false)"/>
+  <arg name="urdf_extras" default="$(optenv HUSKY_URDF_EXTRAS)"/>
+
+	<param name="robot_description" command="$(find xacro)/xacro.py '$(find husky_man_description)/urdf/husky_kinova_man.urdf.xacro'
+	  --inorder
+      robot_namespace:=$(arg robot_namespace)
+      laser_enabled:=$(arg laser_enabled)
+      kinect_enabled:=$(arg kinect_enabled)
+      urdf_extras:=$(arg urdf_extras)
+      " />
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+	</node>
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+</launch>
+

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>husky_man_viz</name>
+  <version>1.1.0</version>
+  <description>The husky_man_viz package</description>
+
+  <maintainer email="hang.liu@iquotient-robotics.com">Ye Tian</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">https://github.com/I-Quotient-Robotics/caster</url>
+  <url type="repository">https://github.com/I-Quotient-Robotics/caster</url>
+  <url type="bugtracker">https://github.com/I-Quotient-Robotics/caster/issues</url>
+
+  <author email="hang.liu@iquotient-robotics.com">Ye Tian</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <depend>rviz</depend>
+  <depend>rviz_imu_plugin</depend>
+
+  <export>
+  </export>
+</package>

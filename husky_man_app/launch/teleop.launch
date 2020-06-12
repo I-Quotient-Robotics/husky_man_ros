@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="log_type" default="screen"/>
+  
+  <!-- Joy controller -->
+  <node pkg="joy" type="joy_node" name="joy_node" output="$(arg log_type)">
+    <param name="dev" type="string" value="/dev/input/js0" />
+    <param name="autorepeat_rate" type="double" value="100" />
+  </node>
+
+  <!-- Joy teleop -->
+  <rosparam command="load" file="$(find husky_man_app)/config/joy_teleop.yaml" />
+  <node pkg="joy_teleop" type="joy_teleop.py" name="joy_teleop_node" output="$(arg log_type)" >
+    <remap from="cmd_vel" to="/joy_teleop/cmd_vel"/>
+  </node>
+
+</launch>

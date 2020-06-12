@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <node pkg="husky_man_app" type="brain_control_interface.py" name="brain_control_interface" output="screen">
+  </node>
+
+<!--   <node pkg="brain_control" type="aruco_detect_client.py" name="aruco_detect_client" output="screen">
+  </node> -->
+<!--   <node pkg="brain_control" type="brain_control_cmd.py" name="brain_control_cmd" output="screen">
+  </node> -->
+
+</launch>

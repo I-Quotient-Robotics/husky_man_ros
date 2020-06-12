@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+
+<robot name="husky" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+
+  <!-- Included husky Files -->
+  <xacro:include filename="$(find husky_description)/urdf/husky.urdf.xacro" />
+  <xacro:include filename="$(find husky_man_description)/urdf/kinect_v2.urdf.xacro" />
+  <!-- <xacro:include filename="$(find slam_portable_description)/urdf/slam_portable_module.urdf.xacro" /> -->
+  <xacro:include filename="$(find pan_tilt_description)/urdf/pan_tilt.urdf.xacro" />
+  <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
+
+  <!-- Included Navigation module Files -->
+  <!-- <xacro:include filename="$(find husky_man_description)/urdf/navigation_module.urdf.xacro" /> -->
+
+  <!-- <link name="base_footprint_module"/> -->
+<!--   <joint name="base_module_joint" type="fixed">
+    <origin xyz="0.238 0 0.404" rpy="0 0 0" />
+    <parent link="base_footprint" />
+    <child link="module_base_link" />
+  </joint>
+ -->
+  <!-- Included support Files -->
+  <link name="support_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://husky_man_description/meshes/9060-husky-pnm-urdf.stl" />
+      </geometry>
+      <material name="">
+        <color rgba="0.2 0.2 0.2 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="base_support_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_footprint" />
+    <child link="support_link" />
+  </joint>
+
+  <!-- Included two kinova arms Files -->
+  <xacro:include filename="$(find kinova_description)/urdf/j2n6s200.xacro"/>
+
+  <link name="left_arm_mount">
+  </link>
+
+  <link name="right_arm_mount">
+  </link>
+
+   <joint name="left_arm_attach" type="fixed">
+    <child link="left_arm_mount" />
+    <parent link="base_footprint" />
+    <origin xyz="0 0.0445 1.044" rpy="0 1.5707 1.5707" />
+  </joint>
+
+  <joint name="right_arm_attach" type="fixed">
+    <child link="right_arm_mount" />
+    <parent link="base_footprint" />
+    <origin xyz="0 -0.0445 1.044" rpy="0 -1.5707 1.5707" />
+  </joint>
+
+  <xacro:j2n6s200  base_parent="left_arm_mount" prefix="left_arm"/>
+
+  <xacro:j2n6s200  base_parent="right_arm_mount" prefix="right_arm"/>
+
+  <xacro:pan_tilt parent="base_footprint" >
+    <origin xyz="0 0 1.164" rpy="0 0 0" />
+  </xacro:pan_tilt>
+
+  <xacro:kinect_v2 parent="pan_tilt_kinect_surface" >
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:kinect_v2>
+
+  <link name="vlp_support_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://husky_man_description/meshes/9060_vlp16_support_urdf.stl" />
+      </geometry>
+      <material name="">
+        <color rgba="0.2 0.2 0.2 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="vlp_support_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_footprint" />
+    <child link="vlp_support_link" />
+  </joint>
+
+
+  <!-- VLP-16 link -->
+  <xacro:VLP-16 parent="base_footprint" name="velodyne" topic="/velodyne_points" hz="10" lasers="16" samples="1875" collision_range="0.3" min_range="0.9" max_range="130.0" noise="0.008" min_angle="-${M_PI}" max_angle="${M_PI}" gpu="false">
+    <origin xyz="0.224 0 0.495" rpy="0 0 0"/>
+  </xacro:VLP-16>
+
+  <link name="imu_external_link"/>
+
+  <joint name="base_imu_joint" type="fixed">
+    <origin xyz="0.199 0 0.394" rpy="0 0 0" />
+    <parent link="base_footprint" />
+    <child link="imu_external_link" />
+  </joint>
+
+</robot>

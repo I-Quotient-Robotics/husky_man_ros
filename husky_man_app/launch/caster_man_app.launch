@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="log_type" default="screen"/>
+
+  <!-- Aruco detect -->
+  <node pkg="aruco_ros" type="marker_publisher" name="aruco_marker_publisher">
+    <param name="image_is_rectified" value="True"/>
+    <param name="marker_size"        value="0.063"/>
+    <param name="reference_frame"    value="kinect2_rgb_optical_frame"/>
+    <param name="camera_frame"       value="kinect2_rgb_optical_frame"/>
+    <remap from="/camera_info" to="/kinect2/qhd/camera_info" />
+    <remap from="/image" to="/kinect2/qhd/image_color" />
+  </node>
+
+  <!-- marker detect -->
+  <node pkg="husky_man_app" type="marker_detect_node" name="marker_detect_node" output="$(arg log_type)" />
+
+  <!-- Caster man app -->
+  <node pkg="husky_man_app" type="box_detect_node" name="caster_man_app_node" output="$(arg log_type)">
+    <rosparam file="$(find husky_man_app)/config/husky_man_app.yaml" command="load" />
+  </node>
+</launch>

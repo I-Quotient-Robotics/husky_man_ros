@@ -1,0 +1,124 @@
+<launch>
+
+  <arg name="port" default="$(optenv HUSKY_PORT /dev/prolific)" />
+  <arg name="log_type" default="screen"/>
+  <arg name="use_urdf" default="false"/>
+  <arg name="kinova_robotType" default="j2n6s200" />
+  <arg name="kinova_robotName" default="$(arg kinova_robotType)"/>
+  <arg name="kinova_robotSerial" default="not_set" />
+
+  <!-- vlp16 laser-->
+  <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch">
+    <arg name="device_ip" value="192.168.1.201"/>
+    <arg name="organize_cloud" default="true" />
+  </include>
+  <include file="$(find husky_man_app)/launch/include/pointcloud_to_laserscan.launch.xml">
+  </include>
+
+  <!-- jy901 imu-->
+  <node pkg="jy901_driver" type="jy901_driver_node" name="jy901_node" output="$(arg log_type)" >
+    <param name="baudrate" type="int" value="115200" />
+    <param name="port" type="string" value="/dev/jy901" />
+    <param name="imu_frame_id" type="string" value="imu_external_link" />
+    <param name="looprate" type="int" value="100" />
+    <remap from="/jy901_node/imu/data" to="imu/data"/> 
+  </node>
+
+  <!-- Husky harware driver -->
+  <node pkg="husky_base" type="husky_node" name="husky_node">
+      <rosparam subst_value="true">
+          port: $(arg port)
+
+          control_frequency: 10.0
+          diagnostic_frequency: 1.0
+
+          max_acceleration: 3.0
+          max_speed: 1.0
+          wheel_diameter: 0.3302
+          polling_timeout: 10.0
+      </rosparam>
+  </node>
+
+  <!-- Differential controller parameters and basic localization -->
+
+  <arg name="multimaster" default="$(optenv ROBOT_MULTIMASTER false)"/>
+  <arg name="simulation" default="$(optenv ROBOT_SIMULATION false)"/>
+  <arg name="robot_namespace" default="$(optenv ROBOT_NAMESPACE robot)"/>
+
+  <arg name="config_extras"
+       default="$(eval optenv('HUSKY_CONFIG_EXTRAS', find('husky_control') + '/config/empty.yaml'))"/>
+
+  <arg name="laser_enabled" default="$(optenv HUSKY_LMS1XX_ENABLED false)"/>
+  <arg name="kinect_enabled" default="$(optenv HUSKY_KINECT_ENABLED false)"/>
+  <arg name="urdf_extras" default="$(optenv HUSKY_URDF_EXTRAS)"/>
+
+  <include file="$(find multimaster_launch)/launch/multimaster_robot.launch" if="$(arg multimaster)">
+    <arg name="gazebo_interface" value="$(find husky_control)/config/gazebo_interface.yaml" />
+    <arg name="public_interface" value="$(find husky_control)/config/public_interface.yaml" />
+    <arg name="robot_namespace" value="$(arg robot_namespace)"/>
+    <arg name="simulation" value="$(arg simulation)"/>
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find husky_man_description)/urdf/husky_kinova_man.urdf.xacro'
+    --inorder
+    robot_namespace:=$(arg robot_namespace)
+    laser_enabled:=$(arg laser_enabled)
+    kinect_enabled:=$(arg kinect_enabled)
+    urdf_extras:=$(arg urdf_extras)
+    " />
+
+  <!-- Load controller configuration -->
+  <rosparam command="load" file="$(find husky_control)/config/control.yaml" />
+
+  <!-- Spawn controllers -->
+  <node name="base_controller_spawner" pkg="controller_manager" type="spawner"
+        args="husky_joint_publisher husky_velocity_controller"/>
+
+  <!-- Start EKF for localization -->
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization">
+    <rosparam command="load" file="$(find husky_control)/config/localization.yaml" />
+  </node>
+
+  <node pkg="interactive_marker_twist_server" type="marker_server" name="twist_marker_server" output="screen"/>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+    <rosparam command="load" file="$(find husky_control)/config/twist_mux.yaml" />
+    <remap from="cmd_vel_out" to="husky_velocity_controller/cmd_vel"/>
+  </node>
+
+  <!-- Override the default control parameters, see config/empty.yaml for default. -->
+  <rosparam command="load" file="$(arg config_extras)" />
+
+  <!-- Diagnostic Aggregator -->
+  <node pkg="diagnostic_aggregator" type="aggregator_node" name="diagnostic_aggregator">
+      <rosparam command="load" file="$(find husky_base)/config/diagnostics.yaml"/>
+  </node>
+
+  <!-- pan tilt-->
+  <node name="pan_tilt" pkg="pan_tilt_driver" type="PanTiltDriverNode" output="screen">
+    <param name="port_name" value="/dev/pan_tilt"/>
+    <param name="yaw_joint_name" value="pan_tilt_yaw_joint"/>
+    <param name="pitch_joint_name" value="pan_tilt_pitch_joint"/>
+  </node>
+
+  <!-- kinect v2-->
+  <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch">
+    <arg name="reg_method" value="cpu" />
+    <arg name="publish_tf" value="true" />
+  </include>
+  
+  <!-- kinova left arm-->
+  <node name="left_arm_driver" pkg="kinova_driver" type="kinova_arm_driver" output="screen" cwd="node" args="j2n6s200">
+    <rosparam file="$(find kinova_bringup)/launch/config/robot_parameters.yaml" command="load" />
+    <param name="serial_number" value="leftarm" />   
+    <param name="robot_name" value="left_arm" />   
+    <param name="robot_type" value="j2n6s200" />   
+    <remap from="/left_arm_driver/out/joint_state" to="/joint_states"/>
+  </node>
+ 
+  <!-- teleop joy-->
+  <include file="$(find husky_man_app)/launch/teleop.launch"/>
+
+</launch>

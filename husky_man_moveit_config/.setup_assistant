@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: husky_man_description
+    relative_path: urdf/husky_kinova_man.urdf.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/husky.srdf
+  CONFIG:
+    author_name: hangliu
+    author_email: hang.liu@iquotient-robotics.com
+    generated_timestamp: 1591764804
