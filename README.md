@@ -159,7 +159,7 @@
     rostopic echo /amcl_pose
 ```
 
-    4.3 在mir100_jaco7_app.yaml中修改导航点,Standby：home点；pick：抓取点；plack：放置点
+    4.3 在husky_man_app.yaml中修改导航点,Standby：home点；pick：抓取点；plack：放置点
 
 5. 注意：
     5.1 导航点不能离障碍物太近，并且在移动抓取中机械臂的臂长有限，导航点距离桌子的距离需要调整（不同桌高距离不同）
